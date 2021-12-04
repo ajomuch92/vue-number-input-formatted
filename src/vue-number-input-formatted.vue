@@ -1,8 +1,7 @@
 <template>
   <input
     ref="input"
-    :type="type"
-    class="gt-input"
+    type="text"
     v-bind="validProps"
     v-model="displayValue"
     @blur="onBlurHandler"
@@ -22,10 +21,6 @@ export default {
     value: {
       type: [Number, String],
       default: null,
-    },
-    type: {
-      type: String,
-      default: 'text',
     },
     positions: {
       type: Number,
@@ -134,17 +129,17 @@ export default {
         return n;
     },
     validProps() {
-        return {
-            id: this.id,
-            disabled: this.disabled,
-            readonly: this.readonly,
-            form: this.form,
-            maxlength: this.maxlength,
-            minlength: this.minlength,
-            name: this.name,
-            pattern: this.pattern,
-            placeholder: this.placeholder,
-        };
+      return {
+        id: this.id,
+        disabled: this.disabled,
+        readonly: this.readonly,
+        form: this.form,
+        maxlength: this.maxlength,
+        minlength: this.minlength,
+        name: this.name,
+        pattern: this.pattern,
+        placeholder: this.placeholder,
+      };
     },
   },
   methods: {
@@ -166,7 +161,7 @@ export default {
       const { value } = event.target;
       const char = String.fromCharCode(event.which);
       const text = value.toString() + char.toString();
-      if (Number.isNaN(text) && text !== '-') {
+      if (isNaN(text) && text !== '-') {
         event.preventDefault();
       }
       this.$emit('keypress', event);
