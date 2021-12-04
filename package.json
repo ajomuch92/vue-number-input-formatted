@@ -1,7 +1,7 @@
 {
   "name": "vue-number-input-formatted",
   "version": "1.0.0",
-  "description": "",
+  "description": "A component to build an input with a format",
   "main": "dist/vue-number-input-formatted.ssr.js",
   "browser": "dist/vue-number-input-formatted.esm.js",
   "module": "dist/vue-number-input-formatted.esm.js",
@@ -44,5 +44,23 @@
   },
   "engines": {
     "node": ">=12"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ajomuch92/vue-number-input-formatted.git"
+  },
+  "keywords": [
+    "vue",
+    "number",
+    "input",
+    "formatter",
+    "input-formatted",
+    "vue-number"
+  ],
+  "author": "Aarón Montes",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ajomuch92/vue-number-input-formatted/issues"
+  },
+  "homepage": "https://github.com/ajomuch92/vue-number-input-formatted#readme"
 }
