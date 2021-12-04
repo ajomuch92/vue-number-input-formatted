@@ -1,7 +1,7 @@
 # vue-number-input-formatted
 A component to build a simple input with a format and without any wrappers. 
 
-<img src="https://raw.githubusercontent.com/ajomuch92/vue-number-input-formatted/main/gif/demo.gif" width="200" height="429"/>
+<img src="https://raw.githubusercontent.com/ajomuch92/vue-number-input-formatted/main/gif/demo.gif" width="300" height="429"/>
 
 ### Install  
 
