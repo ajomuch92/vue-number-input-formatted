@@ -5,7 +5,7 @@ A component to build a simple input with a format and without any wrappers.
 
 NPM:  
 ```bash
-npm i --vue-number-input-formatted
+npm install --save vue-number-input-formatted
 ```
 
 ### Usage instructions  
