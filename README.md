@@ -27,8 +27,8 @@ export default {
 **Props**
 
 |  Name | Type | Description   | Required   | Default   |
-| ------------ | ------------ | ------------ | ------------ |
-| value  | Number, String| Props to set the value of the input | False   | ''   |
+| ------------ | ------------ | ------------ | ------------ | ------------ |
+| value  | Number, String| Props to set the value of the input. Ready to use with v-model directive | False   | ''   |
 | positions  | Number | Number of decimal positions | False   | 2   |
 | prefix  | String | String to set the symbol as input prefix | False   | '$'   |
 | suffix  | String | String to set the symbol as input suffix | False   | ''   |
