@@ -1,78 +1,189 @@
-<script>
+<template>
+  <input
+    ref="input"
+    :type="type"
+    class="gt-input"
+    v-bind="validProps"
+    v-model="displayValue"
+    @blur="onBlurHandler"
+    @change="onChangeHandler"
+    @focus="onFocusHandler"
+    @keydown="onKeyDownHandler"
+    @keypress="onKeyPressHandler"
+    @keyup="onKeyUpHandler"
+    @click="onClickHandler"
+  />
+</template>
 
-export default /*#__PURE__*/{
-  name: 'VueNumberInputFormatted', // vue component name
-  data() {
-    return {
-      counter: 5,
-      initCounter: 5,
-      message: {
-        action: null,
-        amount: null,
-      },
-    };
+<script>
+export default {
+  name: 'VueNumberInputFormatted',
+  props: {
+    value: {
+      type: [Number, String],
+      default: null,
+    },
+    type: {
+      type: String,
+      default: 'text',
+    },
+    positions: {
+      type: Number,
+      default: 2,
+    },
+    prefix: {
+      type: String,
+      default: '$',
+    },
+    suffix: {
+      type: String,
+      default: '',
+    },
+    separator: {
+      type: String,
+      default: ',',
+    },
+    id: {
+      type: String,
+      default: null,
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+    readonly: {
+      type: Boolean,
+      default: false,
+    },
+    form: {
+      type: String,
+      default: null,
+    },
+    maxlength: {
+      type: [String, Number],
+      default: null,
+    },
+    minlength: {
+      type: [String, Number],
+      default: null,
+    },
+    name: {
+      type: String,
+      default: null,
+    },
+    pattern: {
+      type: RegExp,
+      default: null,
+    },
+    placeholder: {
+      type: String,
+      default: null,
+    },
+    padStart: {
+      type: Number,
+      default: 0,
+    },
+    padStartString: {
+      type: String,
+      default: '',
+    },
+    allowEmpty: {
+      type: Boolean,
+      default: false,
+    },
   },
+  data: () => ({
+    isInputActive: false,
+  }),
   computed: {
-    changedBy() {
-      const { message } = this;
-      if (!message.action) return 'initialized';
-      return `${message.action} ${message.amount || ''}`.trim();
+    displayValue: {
+      get() {
+        if (this.isInputActive) {
+          return (this.value || '').toString();
+        }
+        if (this.allowEmpty && (this.value === null || this.value === undefined || this.value === '')) return '';
+        const prefix = this.prefix?.length ? `${this.prefix} ` : '';
+        const suffix = this.suffix?.length ? ` ${this.suffix}` : '';
+        console.log(this.value || 0)
+        let value = (this.value || 0).toFixed(this.positions).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, `$1${this.separator}`);
+        if (this.padStart > 0) {
+          const indexDecimalSeparator = value.indexOf(this.decimalSeparator);
+          if (indexDecimalSeparator !== -1) {
+            const beginString = value.slice(0, indexDecimalSeparator);
+            const endString = value.slice(indexDecimalSeparator, value.length);
+            value = beginString.padStart(this.padStart, this.padStartString) + endString;
+          } else {
+            value = value.padStart(this.padStart, this.padStartString);
+          }
+        }
+        return `${prefix}${value}${suffix}`;
+      },
+      set(modifiedValue) {
+        let newValue = parseFloat(modifiedValue);
+        if (this.allowEmpty && (modifiedValue === null || modifiedValue === undefined || modifiedValue === '')) {
+          newValue = '';
+        } else if (Number.isNaN(newValue)) {
+          newValue = 0;
+        }
+        this.$emit('input', newValue);
+      },
+    },
+    decimalSeparator() {
+        let n = 1.1;
+        n = n.toLocaleString().substring(1, 2);
+        return n;
+    },
+    validProps() {
+        return {
+            id: this.id,
+            disabled: this.disabled,
+            readonly: this.readonly,
+            form: this.form,
+            maxlength: this.maxlength,
+            minlength: this.minlength,
+            name: this.name,
+            pattern: this.pattern,
+            placeholder: this.placeholder,
+        };
     },
   },
   methods: {
-    increment(arg) {
-      const amount = (typeof arg !== 'number') ? 1 : arg;
-      this.counter += amount;
-      this.message.action = 'incremented by';
-      this.message.amount = amount;
+    onBlurHandler(event) {
+      this.isInputActive = false;
+      this.$emit('blur', event);
     },
-    decrement(arg) {
-      const amount = (typeof arg !== 'number') ? 1 : arg;
-      this.counter -= amount;
-      this.message.action = 'decremented by';
-      this.message.amount = amount;
+    onChangeHandler(event) {
+      this.$emit('change', event);
     },
-    reset() {
-      this.counter = this.initCounter;
-      this.message.action = 'reset';
-      this.message.amount = null;
+    onFocusHandler(event) {
+      this.isInputActive = true;
+      this.$emit('focus', event);
+    },
+    onKeyDownHandler(event) {
+      this.$emit('keydown', event);
+    },
+    onKeyPressHandler(event) {
+      const { value } = event.target;
+      const char = String.fromCharCode(event.which);
+      const text = value.toString() + char.toString();
+      if (Number.isNaN(text) && text !== '-') {
+        event.preventDefault();
+      }
+      this.$emit('keypress', event);
+    },
+    onKeyUpHandler(event) {
+      this.$emit('keyup', event);
+    },
+    onClickHandler(event) {
+      this.$emit('click', event);
+    },
+    focus() {
+      this.$refs.input.focus();
     },
   },
 };
 </script>
 
-<template>
-  <div class="vue-number-input-formatted">
-    <p>The counter was {{ changedBy }} to <b>{{ counter }}</b>.</p>
-    <button @click="increment">
-      Click +1
-    </button>
-    <button @click="decrement">
-      Click -1
-    </button>
-    <button @click="increment(5)">
-      Click +5
-    </button>
-    <button @click="decrement(5)">
-      Click -5
-    </button>
-    <button @click="reset">
-      Reset
-    </button>
-  </div>
-</template>
-
 <style scoped>
-  .vue-number-input-formatted {
-    display: block;
-    width: 400px;
-    margin: 25px auto;
-    border: 1px solid #ccc;
-    background: #eaeaea;
-    text-align: center;
-    padding: 25px;
-  }
-  .vue-number-input-formatted p {
-    margin: 0 0 1em;
-  }
+
 </style>
